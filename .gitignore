@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.err
+server-*.log
+server-*.err
+server.out.log
+server.err.log
+tmp_smoke/
+deploy-esignum-*/
+E-Signum-hosting-*.zip
+.env
+

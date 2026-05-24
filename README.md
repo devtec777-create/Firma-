@@ -1,14 +1,14 @@
-# Sistema de Firma Digital para PDFs
+# E-Signum Firma Digital para Documentos
 
-Aplicacion web en Python/Flask para gestionar documentos PDF con multiples firmantes, cargos, permisos, auditoria y cierre automatico cuando todas las firmas requeridas fueron realizadas.
+Aplicacion web en Python/Flask para gestionar documentos PDF, actas, multiples firmantes, cargos, permisos, auditoria, observaciones y cierre documental.
 
-## Instalacion
+## Instalacion local
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-python app.py
+python run_app.py
 ```
 
 Luego abre:
@@ -17,54 +17,30 @@ Luego abre:
 http://127.0.0.1:5000
 ```
 
-## Usuario inicial
+## Hosting
 
-Al iniciar por primera vez se crea un super administrador:
+Revisa [DEPLOY_HOSTING.md](DEPLOY_HOSTING.md).
 
-- RUT: `99.999.999-9`
-- Clave: `Admin12345!`
+El archivo de entrada WSGI es:
 
-Cambia esa clave usando el flujo de recuperacion antes de usar el sistema en produccion.
-
-## Funciones incluidas
-
-- Usuarios con nombre, RUT, correo de recuperacion, cargo y codigo interno.
-- Cargo por defecto: Bombero.
-- Super administrador y administradores.
-- Registro historico al otorgar y quitar administradores.
-- Tipos de documentos configurables.
-- Reglas de firma por cargo y cantidad requerida.
-- Permisos por usuario: ver, imprimir, descargar e informe de historial.
-- Subida de PDFs por administrador.
-- Firma por clave del usuario.
-- Codigo numerico aleatorio de firma asociado a usuario y documento.
-- Visibilidad del estado de firmas.
-- Cierre automatico del documento cuando se completan todas las firmas.
-- Generacion de PDF final con todas las firmas estampadas.
-- Auditoria no eliminable desde la aplicacion.
-- Informe de historial por usuario.
-- Recuperacion de contrasena mediante token registrado en auditoria.
-- Aviso por correo a los firmantes cuando se les asigna un documento.
-- Bandeja de salida para revisar correos enviados, fallidos o no configurados.
-
-## Configuracion de correo SMTP
-
-Si no configuras SMTP, el sistema no puede enviar correos reales y deja los avisos registrados en **Administracion > Bandeja de salida** con estado `not_configured`.
-
-Ejemplo en PowerShell antes de ejecutar:
-
-```powershell
-$env:SMTP_HOST="smtp.gmail.com"
-$env:SMTP_PORT="587"
-$env:SMTP_USER="tu-correo@gmail.com"
-$env:SMTP_PASSWORD="clave-o-app-password"
-$env:SMTP_FROM="tu-correo@gmail.com"
-$env:SMTP_TLS="1"
-.\.venv\Scripts\python.exe run_app.py 5002
+```text
+wsgi:application
 ```
 
-Para Gmail normalmente debes usar una **clave de aplicacion**, no la clave normal de la cuenta.
+## Datos
 
-## Nota legal
+La aplicacion usa SQLite. La ruta puede configurarse con:
 
-Este programa implementa una firma interna trazable mediante autenticacion, codigo aleatorio, auditoria y estampado visible en PDF. Para firma electronica avanzada o certificada puede requerirse integracion con certificados digitales, proveedor acreditado o normativa local aplicable.
+```text
+ESIGNUM_DB_PATH
+```
+
+En este proyecto se incluye la carpeta `data` con base, documentos, imagenes y archivos generados.
+
+## Seguridad
+
+- Usa HTTPS en produccion.
+- No publiques la carpeta `data` si el repositorio o hosting quedan publicos.
+- Configura `FIRMA_SECRET_KEY` con una clave larga y privada.
+- Haz respaldos periodicos de la base de datos y documentos.
+
